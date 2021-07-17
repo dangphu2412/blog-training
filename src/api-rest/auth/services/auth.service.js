@@ -60,25 +60,7 @@ export class AuthService {
     }
 
     async login(body) {
-        const userRowDataPackets = await this.#userService.getByUsernameWithRoles(body.username);
-
-        if (!userRowDataPackets.length) {
-            throw new UnAuthorizedException('Username or password is incorrect');
-        }
-
-        const user = userRowDataPackets[0];
-        user.roles = [];
-
-        userRowDataPackets.forEach(row => {
-            user.roles.push({
-                id: row.role_id,
-                name: row.name
-            });
-        });
-
-        delete user.role_id;
-        delete user.user_id;
-        delete user.name;
+        const user = await this.#userService.getByUsernameWithRoles(body.username);
 
         if (!user || !this.#bcryptService.compare(body.password, user.password)) {
             throw new UnAuthorizedException('Username or password is incorrect');
