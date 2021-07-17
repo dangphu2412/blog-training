@@ -1,7 +1,6 @@
-export function registerInput(body) {
+export function loginInput(body) {
     return {
         username: body.username,
-        fullName: body.fullName,
         password: body.password
     };
 }

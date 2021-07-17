@@ -33,4 +33,10 @@ export class UsersService {
             throw new DuplicateException(`username: ${data.username} has been existed`);
         }
     }
+
+    getByUsernameWithRoles(username) {
+        return this.#userRepository.getOneBy('username', username)
+            .leftJoin('users_roles', 'users_roles.user_id', '=', 'users.id')
+            .leftJoin('roles', 'users_roles.role_id', '=', 'roles.id');
+    }
 }

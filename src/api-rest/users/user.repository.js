@@ -24,15 +24,15 @@ export class UserRepository {
         this.connection = connection;
     }
 
-    get connection() {
+    builder() {
         return this.connection.clone();
     }
 
     createOne(data) {
-        return this.connection.insert(data);
+        return this.builder().insert(data);
     }
 
-    getOne(columns = '*') {
-        return this.connection.select(columns);
+    getOneBy(fieldName, value, columns = '*') {
+        return this.builder().select(columns).where(fieldName, '=', value);
     }
 }

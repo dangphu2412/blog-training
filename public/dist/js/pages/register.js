@@ -12,6 +12,9 @@ $('#register-form').on('submit', async function(e) {
             data: { username, password, fullName },
             method: 'POST'
         });
+
+        localStorage.setItem('user', JSON.stringify(response));
+        location.href = '/'
     } catch (error) {
         console.log(error)
         if (error.status !== 500) {

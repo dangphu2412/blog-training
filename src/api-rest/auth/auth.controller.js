@@ -3,6 +3,7 @@ import { OK } from 'http-status';
 import { httpExceptionHandler } from 'libs/http-exception/handler/exception.handler';
 import { AuthService } from './services/auth.service';
 import { registerInput } from './dto/register-input';
+import { loginInput } from './dto/login-input';
 
 export class AuthController {
     /**
@@ -30,6 +31,15 @@ export class AuthController {
     register = async (req, res) => {
         try {
             const data = await this.#authService.register(registerInput(req.body));
+            return res.status(OK).json(data);
+        } catch (error) {
+            return httpExceptionHandler(error)(res);
+        }
+    }
+
+    login = async (req, res) => {
+        try {
+            const data = await this.#authService.login(loginInput(req.body));
             return res.status(OK).json(data);
         } catch (error) {
             return httpExceptionHandler(error)(res);
