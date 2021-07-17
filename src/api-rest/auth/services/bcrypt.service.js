@@ -12,7 +12,7 @@ export class BcryptService {
     static getSingleton() {
         if (!BcryptService.#instance) {
             BcryptService.#instance = new BcryptService(
-                ConfigService.getSingleton().get('SALT_ROUNDS')
+                Number.parseInt(ConfigService.getSingleton().get('SALT_ROUNDS'), 10)
             );
             logger.info(`[${BcryptService.name}] is bundling`);
         }

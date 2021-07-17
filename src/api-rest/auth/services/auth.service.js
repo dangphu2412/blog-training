@@ -44,14 +44,17 @@ export class AuthService {
         this.#jwtService = jwtService;
     }
 
-    register(body) {
+    async register(body) {
         body.password = this.#bcryptService.hash(body.password);
 
-        const user = this.#userService.createOneAndReturn(body);
+        const userId = await this.#userService.createOneAndReturn(body);
 
         return profileResponse(
-            user,
-            this.#jwtService.sign(jwtPayload(user.id, []))
+            {
+                id: userId,
+                ...body
+            },
+            this.#jwtService.sign(jwtPayload(userId, ['VISITOR']))
         );
     }
 }

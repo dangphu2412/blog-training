@@ -4,6 +4,6 @@ import { HttpException } from './base';
 
 export class DuplicateException extends HttpException {
     constructor(msg = 'Duplicate record') {
-        super(msg, ERROR_CODE.DUPLICATE, CONFLICT);
+        super(CONFLICT, ERROR_CODE.DUPLICATE, msg);
     }
 }

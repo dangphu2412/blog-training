@@ -29,6 +29,10 @@ export class UserRepository {
     }
 
     createOne(data) {
-        return this.connection.insert(data).returning('*');
+        return this.connection.insert(data);
+    }
+
+    getOne(columns = '*') {
+        return this.connection.select(columns);
     }
 }

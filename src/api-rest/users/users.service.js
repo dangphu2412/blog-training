@@ -27,7 +27,8 @@ export class UsersService {
 
     async createOneAndReturn(data) {
         try {
-            await this.#userRepository.createOne(data);
+            const [id] = await this.#userRepository.createOne(data);
+            return id;
         } catch (error) {
             throw new DuplicateException(`username: ${data.username} has been existed`);
         }

@@ -4,6 +4,6 @@ import { HttpException } from './base';
 
 export class NotFoundException extends HttpException {
     constructor(msg = 'Not found') {
-        super(msg, ERROR_CODE.NOT_FOUND, NOT_FOUND);
+        super(NOT_FOUND, ERROR_CODE.NOT_FOUND, msg);
     }
 }

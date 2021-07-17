@@ -1,17 +1,6 @@
-doctype html
-head
-  meta(charset='utf-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1')
-  title AdminLTE 3 | Log in
-  // Google Font: Source Sans Pro
-  link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback')
-  // Font Awesome
-  link(rel='stylesheet' href='plugins/fontawesome-free/css/all.min.css')
-  // icheck bootstrap
-  link(rel='stylesheet' href='plugins/icheck-bootstrap/icheck-bootstrap.min.css')
-  // Theme style
-  link(rel='stylesheet' href='dist/css/adminlte.min.css')
-body.hold-transition.login-page
+extends ../../layout/public/auth.layout.pug
+
+block content
   .login-box
     .login-logo
       a(href='#')
@@ -21,14 +10,14 @@ body.hold-transition.login-page
     .card
       .card-body.login-card-body
         p.login-box-msg Sign in to start your session
-        form(action='#' method='post')
+        form#login-form(action='#' method='post')
           .input-group.mb-3
-            input.form-control(type='email' placeholder='Email')
+            input#email.form-control(type='email' placeholder='Email')
             .input-group-append
               .input-group-text
                 span.fas.fa-envelope
           .input-group.mb-3
-            input.form-control(type='password' placeholder='Password')
+            input#password.form-control(type='password' placeholder='Password')
             .input-group-append
               .input-group-text
                 span.fas.fa-lock
@@ -57,9 +46,6 @@ body.hold-transition.login-page
           a.text-center(href='register.html') Register a new membership
       // /.login-card-body
   // /.login-box
-// jQuery
-script(src='plugins/jquery/jquery.min.js')
-// Bootstrap 4
-script(src='plugins/bootstrap/js/bootstrap.bundle.min.js')
-// AdminLTE App
-script(src='dist/js/adminlte.min.js')
+
+block scripts
+  script(src='dist/js/pages/login.js') 

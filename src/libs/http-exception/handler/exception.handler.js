@@ -18,6 +18,7 @@ export function httpExceptionHandler(exception) {
     }
 
     logger.error(exception.message);
+    logger.error(exception.stack);
 
     return res => res.status(INTERNAL_SERVER_ERROR).json({
         code: ERROR_CODE.INTERNAL_SERVER_ERROR,
