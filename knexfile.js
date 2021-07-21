@@ -12,6 +12,7 @@ module.exports = {
             directory: `${process.cwd()}/src/database/seeds`,
             tableName: 'seeds',
         },
+        log: true
     },
     production: {
         client: process.env.DATABASE_TYPE,

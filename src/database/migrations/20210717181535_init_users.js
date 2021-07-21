@@ -41,4 +41,4 @@ export async function up(knex) {
 /**
  * @param {import("knex")} knex
  */
-export function down(knex) { return knex.schema.dropTableIfExists('users'); }
+export function down(knex) { return knex.table('users_roles').delete(); }

@@ -59,4 +59,29 @@ export class UsersService {
 
         return user;
     }
+
+    async getAll() {
+        const rows = await this.#userRepository.getAll()
+            .leftJoin('users_roles', 'users_roles.user_id', '=', 'users.id')
+            .leftJoin('roles', 'users_roles.role_id', '=', 'roles.id');
+
+        if (!rows.length) {
+            return null;
+        }
+
+        const users = {};
+
+        rows.forEach(row => {
+            if (!users[row.user_id]) {
+                users[row.user_id] = {
+                    ...row,
+                    roles: [row.name]
+                };
+            } else {
+                users[row.user_id].roles.push(row.name);
+            }
+        });
+
+        return Object.values(users);
+    }
 }
