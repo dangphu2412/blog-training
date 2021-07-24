@@ -1,0 +1,43 @@
+extends ../../layout/private/manage.layout.pug
+
+block content
+  .content-wrapper
+    // Content Header (Page header)
+    section.content-header
+      .container-fluid
+        .row.mb-2
+          .col-sm-6
+            h1 Create a new blog
+          .col-sm-6
+            ol.breadcrumb.float-sm-right
+              li.breadcrumb-item
+                a(href='/') Home
+              li.breadcrumb-item.active Blog
+      // /.container-fluid
+    // Main content
+    section.content
+      .container-fluid
+        .row
+          // left column
+          .col-md-12
+            // general form elements
+            .card.card-primary
+              .card-header
+                h3.card-title Let's create a new blog
+              // /.card-header
+              // form start
+              form
+                .card-body
+                  .form-group
+                    label(for='exampleInputEmail1') Title
+                    input#exampleInputEmail1.form-control(type='email' placeholder='Enter title')
+                  .form-group
+                    label(for='exampleInputPassword1') Password
+                    input#exampleInputPassword1.form-control(type='password' placeholder='Enter title')
+                // /.card-body
+                .card-footer
+                  button.btn.btn-primary(type='submit') Save
+
+
+block scripts
+    script(src="dist/js/pages/blog.js") 

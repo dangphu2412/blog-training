@@ -1,23 +1,23 @@
-function renderTableItem(user) {
+function renderTableItem(blog) {
     return `
     <tr>
-        <td> ${user.user_id}
-        <td> ${user.username}
-        <td> ${user.fullName}
-        <td> ${user.status}
-        <td> ${user.roles.toString()}
+        <td> ${blog.blog_id}
+        <td> ${blog.title}
+        <td> ${blog.category}
+        <td> ${blog.status}
+        <td> ${blog.tags.toString()}
     </tr>
     `;
 }
 
 $(async function() {
     try {
-        const users = await $.ajax({
-            url: 'http://localhost:3000/api/v1/users',
+        const blogs = await $.ajax({
+            url: 'http://localhost:3000/api/v1/blogs',
             method: 'GET'
         });
     
-        users.forEach(user => {
+        blogs.forEach(user => {
             $('#user-table').append(renderTableItem(user));
         })
     } catch (error) {

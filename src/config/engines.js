@@ -62,7 +62,7 @@ export class EngineConfig {
         this.app.use('/api', apiRouter);
         this.app.use('/', clientRouter);
         this.app.use((req, res) => res.render('pages/error', {
-            message: `Page ${req.url} not found`
+            message: `Page ${req.hostname}${req.url} not found`
         }));
         await authenDatabaseConnection();
     }

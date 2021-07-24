@@ -11,7 +11,7 @@ block content
           .col-sm-6
             ol.breadcrumb.float-sm-right
               li.breadcrumb-item
-                a(href='#') Home
+                a(href='/') Home
               li.breadcrumb-item.active User
       // /.container-fluid
     // Main content
@@ -22,9 +22,11 @@ block content
             .card
               .card-header
                 h3.card-title User in system
-              // /.card-header
+                div(style='float: right')
+                  button#creation.btn.btn-primary(type="button" data-toggle="modal" data-target="#modal-default") Add
               .card-body
-                table#example2.table.table-bordered.table-hover
+                // /.card-header
+                table#user-table-layout.table.table-bordered.table-hover
                   thead
                     tr
                       th Id
@@ -45,23 +47,22 @@ block content
         // /.row
       // /.container-fluid
     // /.content
+  #modal-default.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h4.modal-title Create new user
+          button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') &times;
+        .modal-body
+          p One fine body&mldr;
+        .modal-footer.justify-content-between
+          button.btn.btn-default(type='button' data-dismiss='modal') Close
+          button.btn.btn-primary(type='button') Save
+      // /.modal-content
+    // /.modal-dialog
+
+
 
 block scripts
-    script.
-        $(function () {
-            $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
-        });
     script(src="dist/js/pages/user.js") 

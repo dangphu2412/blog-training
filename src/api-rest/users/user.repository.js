@@ -16,7 +16,7 @@ export class UserRepository {
     }
 
     /**
-     * @type {import('knex').QueryInterface}
+     * @type {import('knex').QueryBuilder}
      */
     connection;
 

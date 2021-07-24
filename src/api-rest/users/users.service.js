@@ -34,8 +34,8 @@ export class UsersService {
         }
     }
 
-    getByUsernameWithRoles(username) {
-        const rows = this.#userRepository.getOneBy('username', username)
+    async getByUsernameWithRoles(username) {
+        const rows = await this.#userRepository.getOneBy('username', username)
             .leftJoin('users_roles', 'users_roles.user_id', '=', 'users.id')
             .leftJoin('roles', 'users_roles.role_id', '=', 'roles.id');
 
