@@ -1,7 +1,7 @@
 export function registerInput(body) {
     return {
         username: body.username,
-        fullName: body.fullName,
+        full_name: body.fullName,
         password: body.password
     };
 }

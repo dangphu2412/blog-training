@@ -18,13 +18,13 @@ PATH_LOOKUP = null;
  */
 export async function up(knex) {
     const roles = await knex.table('roles').select();
-    const [id] = await knex.table('users').insert([
+    const [{ id }] = await knex.table('users').insert([
         {
             username: 'dangphu241299@gmail.com',
             password: BcryptService.getSingleton().hash('Phu123'),
-            fullName: 'Anh Fus'
+            full_name: 'Anh Fus'
         }
-    ]);
+    ]).returning('*');
 
     await knex.table('users_roles').insert([
         {
