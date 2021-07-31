@@ -1,4 +1,5 @@
 import { logger } from 'common/utils';
+import { toSearchValue } from 'common/utils/query';
 import { DuplicateException } from 'libs/http-exception/exceptions';
 import { UserRepository } from './user.repository';
 
@@ -60,10 +61,17 @@ export class UsersService {
         return user;
     }
 
-    async getAll() {
-        const rows = await this.#userRepository.getAll()
+    async getAll({ page = 1, size = 3, ...query }) {
+        const builder = this.#userRepository.getAll((page - 1) * size, size)
             .leftJoin('users_roles', 'users_roles.user_id', '=', 'users.id')
             .leftJoin('roles', 'users_roles.role_id', '=', 'roles.id');
+
+        if (query.s) {
+            builder.where('username', 'like', toSearchValue(query.s));
+            builder.orWhere('fullName', 'like', toSearchValue(query.s));
+        }
+
+        const rows = await builder;
 
         if (!rows.length) {
             return null;

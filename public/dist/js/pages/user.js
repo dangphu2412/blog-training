@@ -1,4 +1,4 @@
-function renderTableItem(user) {
+function TableItem(user) {
     return `
     <tr>
         <td> ${user.user_id}
@@ -10,16 +10,34 @@ function renderTableItem(user) {
     `;
 }
 
-$(async function() {
+function PageItem(value) {
+    return `
+    <li class="page-item">
+        <a class="page-link" href='#'> ${value}</a>
+    </li>
+    `
+}
+
+async function callApiGetUser(query) {
     try {
-        const users = await $.ajax({
-            url: 'http://localhost:3000/api/v1/users',
+        const response = await $.ajax({
+            url: 'http://localhost:3000/api/v1/users?' + query,
             method: 'GET'
         });
     
-        users.forEach(user => {
-            $('#user-table').append(renderTableItem(user));
+        response.data.forEach(user => {
+            $('#user-table').append(TableItem(user));
         })
+
+        $('#pagination').append(PageItem('&laquo'));
+
+        for (let index = 1; index < response.totalPage + 1; index++) {
+            $('#pagination').append(PageItem(index));
+        }
+
+
+        $('#pagination').append(PageItem('&raquo'));
+
     } catch (error) {
         console.log(error)
         if (error.status !== 500) {
@@ -32,4 +50,18 @@ $(async function() {
         }
         alert(error.responseJSON.message)
     }
+}
+
+$(async function() {
+    await callApiGetUser();
+});
+
+$('#search').on('change', async function(e) {
+    const searchValue = $('#search').val();
+    $('#user-table').empty()
+    await callApiGetUser(`s=${searchValue}`);
+})
+
+$('#page-link').on('click', function(e) {
+    // await callApiGetUser(`s=${searchValue}`);
 });

@@ -22,8 +22,10 @@ block content
             .card
               .card-header
                 h3.card-title User in system
+                button#creation.ml-3.btn.btn-primary(type="button" data-toggle="modal" data-target="#modal-default") Add
                 div(style='float: right')
-                  button#creation.btn.btn-primary(type="button" data-toggle="modal" data-target="#modal-default") Add
+                  button#filter.btn.btn-primary(type="button" data-toggle="modal" data-target="#modal-filter") Filter
+                  input#search(type='search' placeholder='Type your keywords here')
               .card-body
                 // /.card-header
                 table#user-table-layout.table.table-bordered.table-hover
@@ -42,6 +44,9 @@ block content
                       th Platform(s)
                       th Engine version
                       th CSS grade
+                div
+              .card-footer.clearfix
+                ul#pagination.pagination.pagination-sm.m-0.float-right
               // /.card-body
           // /.col
         // /.row
@@ -62,6 +67,20 @@ block content
       // /.modal-content
     // /.modal-dialog
 
+  #modal-filter.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h4.modal-title Filter
+          button.close(type='button' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') &times;
+        .modal-body
+          p One fine body&mldr;
+        .modal-footer.justify-content-between
+          button.btn.btn-default(type='button' data-dismiss='modal') Close
+          button.btn.btn-primary(type='button') Save
+      // /.modal-content
+    // /.modal-dialog
 
 
 block scripts

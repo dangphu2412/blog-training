@@ -28,8 +28,12 @@ export class UsersController {
 
     getAll = async (req, res) => {
         try {
-            const data = await this.#userService.getAll();
-            return res.status(OK).json(data);
+            const data = await this.#userService.getAll(req.query);
+            return res.status(OK).json({
+                data,
+                totalRecord: 10,
+                totalPage: 5
+            });
         } catch (error) {
             return httpExceptionHandler(error)(res);
         }
