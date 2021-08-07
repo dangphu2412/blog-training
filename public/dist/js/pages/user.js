@@ -3,7 +3,7 @@ function TableItem(user) {
     <tr>
         <td> ${user.user_id}
         <td> ${user.username}
-        <td> ${user.fullName}
+        <td> ${user.full_name}
         <td> ${user.status}
         <td> ${user.roles.toString()}
     </tr>
@@ -12,22 +12,24 @@ function TableItem(user) {
 
 function PageItem(value) {
     return `
-    <li class="page-item">
-        <a class="page-link" href='#'> ${value}</a>
-    </li>
+        <li class="page-item">
+            <a class="page-link" href='#'> ${value}</a>
+        </li>
     `
 }
 
-async function callApiGetUser(query) {
+async function callApiGetUser(query = "") {
     try {
         const response = await $.ajax({
-            url: 'http://localhost:3000/api/v1/users?' + query,
+            url: '/api/v1/users?' + query,
             method: 'GET'
         });
     
         response.data.forEach(user => {
             $('#user-table').append(TableItem(user));
         })
+
+        $('#pagination').empty();
 
         $('#pagination').append(PageItem('&laquo'));
 

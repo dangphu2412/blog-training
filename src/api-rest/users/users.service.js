@@ -68,7 +68,7 @@ export class UsersService {
 
         if (query.s) {
             builder.where('username', 'like', toSearchValue(query.s));
-            builder.orWhere('fullName', 'like', toSearchValue(query.s));
+            builder.orWhere('full_name', 'like', toSearchValue(query.s));
         }
 
         const rows = await builder;

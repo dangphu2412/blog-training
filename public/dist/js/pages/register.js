@@ -8,7 +8,7 @@ $('#register-form').on('submit', async function(e) {
 
     try {
         const response = await $.ajax({
-            url: 'http://localhost:3000/api/v1/auth/register',
+            url: '/api/v1/auth/register',
             data: { username, password, fullName },
             method: 'POST'
         });

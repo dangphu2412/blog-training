@@ -13,7 +13,7 @@ function renderTableItem(blog) {
 $(async function() {
     try {
         const blogs = await $.ajax({
-            url: 'http://localhost:3000/api/v1/blogs',
+            url: '/api/v1/blogs',
             method: 'GET'
         });
     

@@ -7,7 +7,7 @@ $('#login-form').on('submit', async function(e) {
 
     try {
         const response = await $.ajax({
-            url: 'http://localhost:3000/api/v1/auth/login',
+            url: '/api/v1/auth/login',
             data: { username, password },
             method: 'POST'
         });
