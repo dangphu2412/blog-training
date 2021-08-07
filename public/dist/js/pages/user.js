@@ -1,3 +1,5 @@
+const sorts = {};
+
 function TableItem(user) {
     return `
     <tr>
@@ -19,6 +21,7 @@ function PageItem(value) {
 }
 
 async function callApiGetUser(query = "") {
+    console.log(query);
     try {
         const response = await $.ajax({
             url: '/api/v1/users?' + query,
@@ -67,3 +70,42 @@ $('#search').on('change', async function(e) {
 $('#page-link').on('click', function(e) {
     // await callApiGetUser(`s=${searchValue}`);
 });
+
+async function appendSortAndCallApi(e) {
+    e.preventDefault();
+    const sortField = this.getAttribute('sort-prop');
+    sorts[sortField] = '';
+    let sortQuery = 'sort=';
+    Object.keys(sorts).forEach(field => {
+        sortQuery += field;
+        sortQuery += ','
+    })
+    sortQuery = sortQuery.substring(0, sortQuery.length - 1);
+    await callApiGetUser(sortQuery)
+}
+
+$('.fas.fa-sort-up').on('click', function(e) {
+    e.preventDefault();
+    const sortField = this.getAttribute('sort-prop');
+    sorts[sortField] = '';
+    let sortQuery = 'sort=';
+    Object.keys(sorts).forEach(field => {
+        sortQuery += field;
+        sortQuery += ','
+    })
+    sortQuery = sortQuery.substring(0, sortQuery.length - 1);
+    await callApiGetUser(sortQuery)
+})
+
+$('.fas.fa-sort-down').on('click', function(e) {
+    e.preventDefault();
+    const sortField = this.getAttribute('sort-prop');
+    sorts[sortField] = '-';
+    let sortQuery = 'sort=';
+    Object.keys(sorts).forEach(field => {
+        sortQuery += field;
+        sortQuery += ','
+    })
+    sortQuery = sortQuery.substring(0, sortQuery.length - 1);
+    await callApiGetUser(sortQuery)
+})

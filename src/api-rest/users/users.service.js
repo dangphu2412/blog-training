@@ -1,9 +1,14 @@
 import { logger } from 'common/utils';
 import { toSearchValue } from 'common/utils/query';
 import { DuplicateException } from 'libs/http-exception/exceptions';
+import { SortTransform } from 'modules/query/sort/sort.transform';
 import { UserRepository } from './user.repository';
 
 export class UsersService {
+    static DEFAULT_SIZE = 10;
+
+    static DEFAULT_PAGE = 1;
+
     /**
      * @type {UsersService}
      */
@@ -61,7 +66,13 @@ export class UsersService {
         return user;
     }
 
-    async getAll({ page = 1, size = 3, ...query }) {
+    async getAll(q) {
+        const {
+            page = UsersService.DEFAULT_PAGE,
+            size = UsersService.DEFAULT_SIZE,
+            ...query
+        } = q;
+
         const builder = this.#userRepository.getAll((page - 1) * size, size)
             .leftJoin('users_roles', 'users_roles.user_id', '=', 'users.id')
             .leftJoin('roles', 'users_roles.role_id', '=', 'roles.id');
@@ -69,6 +80,13 @@ export class UsersService {
         if (query.s) {
             builder.where('username', 'like', toSearchValue(query.s));
             builder.orWhere('full_name', 'like', toSearchValue(query.s));
+        }
+
+        if (query.sort) {
+            const sortTransformed = new SortTransform(query.sort).transform();
+            sortTransformed.forEach(sort => {
+                builder.orderBy(sort.column, sort.direction);
+            });
         }
 
         const rows = await builder;
