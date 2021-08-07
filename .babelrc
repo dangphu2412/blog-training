@@ -23,9 +23,11 @@
     ["module-resolver", {
       "root": ["./src"],
       "alias": {
-        "core": "./src/core",
         "src": "./src",
-        "packages": "./src/packages"
+        "@rest": "./src/api-rest",
+        "@common": "./src/common",
+        "@config": "./src/config",
+        "@libs": "./src/libs"
       }
     }]
   ],
