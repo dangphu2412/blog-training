@@ -38,4 +38,17 @@ export class UsersController {
             return httpExceptionHandler(error)(res);
         }
     }
+
+    createOne = async (req, res) => {
+        try {
+            const data = await this.#userService.createOneAndReturn(req.query);
+            return res.status(OK).json({
+                data,
+                totalRecord: 10,
+                totalPage: 5
+            });
+        } catch (error) {
+            return httpExceptionHandler(error)(res);
+        }
+    }
 }

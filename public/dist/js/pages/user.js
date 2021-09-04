@@ -23,9 +23,13 @@ function PageItem(value) {
 async function callApiGetUser(query = "") {
     console.log(query);
     try {
+        console.log((JSON.parse(localStorage.getItem('user'))).accessToken);
         const response = await $.ajax({
             url: '/api/v1/users?' + query,
-            method: 'GET'
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + (JSON.parse(localStorage.getItem('user'))).accessToken
+            }
         });
 
         $('#user-table').empty()

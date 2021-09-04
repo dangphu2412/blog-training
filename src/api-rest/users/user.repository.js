@@ -29,7 +29,7 @@ export class UserRepository {
     }
 
     createOne(data) {
-        return this.builder().insert(data);
+        return this.builder().insert(data).returning('id');
     }
 
     getOneBy(fieldName, value, columns = '*') {
