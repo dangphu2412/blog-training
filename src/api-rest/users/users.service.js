@@ -1,14 +1,11 @@
+import { DEFAULT_PAGE, DEFAULT_SIZE } from 'common/constants/query.constant';
 import { logger } from 'common/utils';
 import { toSearchValue } from 'common/utils/query';
 import { DuplicateException } from 'libs/http-exception/exceptions';
-import { SortTransform } from 'modules/query/sort/sort.transform';
+import { SortCriteria } from 'modules/query/sort/sort-criteria';
 import { UserRepository } from './user.repository';
 
 export class UsersService {
-    static DEFAULT_SIZE = 10;
-
-    static DEFAULT_PAGE = 1;
-
     /**
      * @type {UsersService}
      */
@@ -68,46 +65,62 @@ export class UsersService {
 
     async getAll(q) {
         const {
-            page = UsersService.DEFAULT_PAGE,
-            size = UsersService.DEFAULT_SIZE,
+            page = DEFAULT_PAGE,
+            size = DEFAULT_SIZE,
             ...query
         } = q;
 
-        const builder = this.#userRepository.getAll((page - 1) * size, size)
+        const rootBuilder = this.#userRepository.builder()
+            .select()
             .leftJoin('users_roles', 'users_roles.user_id', '=', 'users.id')
-            .leftJoin('roles', 'users_roles.role_id', '=', 'roles.id');
+            .leftJoin('roles', 'users_roles.role_id', '=', 'roles.id')
+            .distinct('users.id')
+            .offset((page - 1) * size)
+            .limit(size);
 
         if (query.s) {
-            builder.where('username', 'like', toSearchValue(query.s));
-            builder.orWhere('full_name', 'like', toSearchValue(query.s));
+            rootBuilder.where('username', 'like', toSearchValue(query.s));
+            rootBuilder.orWhere('full_name', 'like', toSearchValue(query.s));
         }
 
+        const userIds = (await rootBuilder).map(user => user.id);
+
+        const resultBuilder = this.#userRepository.builder()
+            .select()
+            .leftJoin('users_roles', 'users_roles.user_id', '=', 'users.id')
+            .leftJoin('roles', 'users_roles.role_id', '=', 'roles.id')
+            .whereIn('users.id', userIds);
+
         if (query.sort) {
-            const sortTransformed = new SortTransform(query.sort).transform();
+            const sortTransformed = new SortCriteria(query.sort).transform();
             sortTransformed.forEach(sort => {
-                builder.orderBy(sort.column, sort.direction);
+                resultBuilder.orderBy(sort.column, sort.direction);
             });
         }
 
-        const rows = await builder;
+        const rows = await resultBuilder;
 
+        return this._toUsers(rows);
+    }
+
+    _toUsers(rows) {
         if (!rows.length) {
             return null;
         }
 
-        const users = {};
+        const users = [];
 
-        rows.forEach(row => {
-            if (!users[row.user_id]) {
-                users[row.user_id] = {
-                    ...row,
-                    roles: [row.name]
-                };
+        let currentUserId;
+
+        for (let i = 0; i < rows.length; i += 1) {
+            if (rows[i].user_id !== currentUserId) {
+                currentUserId = rows[i].user_id;
+                rows[i].roles = [rows[i].role_name];
+                users.push(rows[i]);
             } else {
-                users[row.user_id].roles.push(row.name);
+                users[users.length - 1].roles.push(rows[i].role_name);
             }
-        });
-
-        return Object.values(users);
+        }
+        return users;
     }
 }

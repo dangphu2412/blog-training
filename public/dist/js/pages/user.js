@@ -27,7 +27,9 @@ async function callApiGetUser(query = "") {
             url: '/api/v1/users?' + query,
             method: 'GET'
         });
-    
+
+        $('#user-table').empty()
+
         response.data.forEach(user => {
             $('#user-table').append(TableItem(user));
         })
@@ -63,7 +65,6 @@ $(async function() {
 
 $('#search').on('change', async function(e) {
     const searchValue = $('#search').val();
-    $('#user-table').empty()
     await callApiGetUser(`s=${searchValue}`);
 })
 
@@ -71,20 +72,7 @@ $('#page-link').on('click', function(e) {
     // await callApiGetUser(`s=${searchValue}`);
 });
 
-async function appendSortAndCallApi(e) {
-    e.preventDefault();
-    const sortField = this.getAttribute('sort-prop');
-    sorts[sortField] = '';
-    let sortQuery = 'sort=';
-    Object.keys(sorts).forEach(field => {
-        sortQuery += field;
-        sortQuery += ','
-    })
-    sortQuery = sortQuery.substring(0, sortQuery.length - 1);
-    await callApiGetUser(sortQuery)
-}
-
-$('.fas.fa-sort-up').on('click', function(e) {
+$('.fas.fa-sort-up').on('click', async function(e) {
     e.preventDefault();
     const sortField = this.getAttribute('sort-prop');
     sorts[sortField] = '';
@@ -97,13 +85,14 @@ $('.fas.fa-sort-up').on('click', function(e) {
     await callApiGetUser(sortQuery)
 })
 
-$('.fas.fa-sort-down').on('click', function(e) {
+$('.fas.fa-sort-down').on('click', async function(e) {
     e.preventDefault();
     const sortField = this.getAttribute('sort-prop');
-    sorts[sortField] = '-';
+    const sortColumn = sortField.slice(1);
+    sorts[sortColumn] = '-';
     let sortQuery = 'sort=';
     Object.keys(sorts).forEach(field => {
-        sortQuery += field;
+        sortQuery += sorts[field] + field;
         sortQuery += ','
     })
     sortQuery = sortQuery.substring(0, sortQuery.length - 1);

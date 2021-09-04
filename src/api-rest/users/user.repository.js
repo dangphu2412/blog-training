@@ -35,8 +35,4 @@ export class UserRepository {
     getOneBy(fieldName, value, columns = '*') {
         return this.builder().select(columns).where(fieldName, '=', value);
     }
-
-    getAll(offset, limit, columns = '*') {
-        return this.builder().select(columns).offset(offset).limit(limit);
-    }
 }
